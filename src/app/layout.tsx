@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Open_Sans } from "next/font/google";
+import { ThemeProvider } from "@mui/material";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
+import CssBaseline from "@mui/material/CssBaseline";
+import theme from "./theme";
+import DashboardInvoice from "./components/layout/dashboard-invoice";
 import "./globals.css";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+const openSans = Open_Sans({
+  weight: ["300", "400", "500", "600", "700"],
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-open-sans",
 });
 
 export const metadata: Metadata = {
@@ -25,8 +26,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+      <body className={openSans.variable}>
+        <AppRouterCacheProvider options={{ key: "css" }}>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <DashboardInvoice>{children}</DashboardInvoice>
+          </ThemeProvider>
+        </AppRouterCacheProvider>
       </body>
     </html>
   );
