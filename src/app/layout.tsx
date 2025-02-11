@@ -4,7 +4,7 @@ import { ThemeProvider } from "@mui/material";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import CssBaseline from "@mui/material/CssBaseline";
 import theme from "./theme";
-import DashboardInvoice from "./components/layout/dashboard-invoice";
+import DashboardInvoice from "@/components/layout/dashboard-invoice";
 import "./globals.css";
 
 const openSans = Open_Sans({

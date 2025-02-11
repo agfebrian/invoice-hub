@@ -1,13 +1,7 @@
 "use client";
 import React from "react";
-import {
-  Avatar,
-  Box,
-  IconButton,
-  Menu,
-  MenuItem,
-  Typography,
-} from "@mui/material";
+import { Avatar, Box, IconButton, MenuItem, Typography } from "@mui/material";
+import MenuStyled from "../ui/menu-styled";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { deepPurple } from "@mui/material/colors";
 
@@ -59,7 +53,7 @@ export default function MenuProfile() {
           <ExpandMoreIcon sx={{ marginLeft: -1 }} />
         </IconButton>
       </Box>
-      <Menu
+      <MenuStyled
         id="basic-menu"
         anchorEl={anchorEl}
         open={open}
@@ -76,18 +70,11 @@ export default function MenuProfile() {
         MenuListProps={{
           "aria-labelledby": "basic-button",
         }}
-        sx={{
-          "& .MuiPaper-root": {
-            minWidth: 180,
-            boxShadow:
-              "rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px",
-          },
-        }}
       >
         <MenuItem onClick={handleClose}>Profile</MenuItem>
         <MenuItem onClick={handleClose}>My account</MenuItem>
         <MenuItem onClick={handleClose}>Logout</MenuItem>
-      </Menu>
+      </MenuStyled>
     </div>
   );
 }

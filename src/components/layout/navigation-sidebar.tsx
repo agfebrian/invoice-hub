@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/system";
 import { usePathname } from "next/navigation";
-import NAVIGATION from "@/constants/navigation";
+import { NAVIGATION } from "@/constants";
 
 const ListItemStyled = styled(ListItemButton)(() => ({
   whiteSpace: "nowrap",
