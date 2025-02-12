@@ -8,3 +8,11 @@ export function Title({ children }: { children: React.ReactNode }) {
     </Typography>
   );
 }
+
+export function Subtitle({ children }: { children: React.ReactNode }) {
+  return (
+    <Typography variant="h3" fontSize={16} fontWeight={600}>
+      {children}
+    </Typography>
+  );
+}
