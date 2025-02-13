@@ -1,42 +1,13 @@
 "use client";
 import FormLabelStyled from "@/components/ui/form-label-styled";
-import TextFieldStyled from "@/components/ui/text-field-styled";
+import {
+  TextFieldStyled,
+  InputAndormentAmount,
+} from "@/components/ui/text-field-styled";
 import SelectStyled from "@/components/ui/select-styled";
-import { Box, Grid2, InputAdornment, MenuItem } from "@mui/material";
+import { Box, Grid2, MenuItem } from "@mui/material";
 import { ButtonPrimary } from "@/components/ui/buttons";
 import { NumericFormat } from "react-number-format";
-
-function InputAndormentAmount() {
-  return (
-    <TextFieldStyled
-      placeholder="Enter your invoice amount"
-      slotProps={{
-        input: {
-          startAdornment: (
-            <InputAdornment position="start">
-              <Box
-                sx={{
-                  bgcolor: "rgba(217, 217, 217, 0.4)",
-                  py: 1,
-                  ml: -1.5,
-                  borderRadius: "3px 0 0 3px",
-                  color: "#64748B",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "80px",
-                }}
-              >
-                Rp
-              </Box>
-            </InputAdornment>
-          ),
-        },
-      }}
-      sx={{ "& .MuiInputBase-input": { pl: 1 } }}
-    />
-  );
-}
 
 export function InvoiceForm() {
   return (

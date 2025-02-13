@@ -1,6 +1,6 @@
-import { TextField, TextFieldProps } from "@mui/material";
+import { Box, InputAdornment, TextField, TextFieldProps } from "@mui/material";
 
-export default function TextFieldStyled({
+export function TextFieldStyled({
   variant = "outlined",
   size = "small",
   sx,
@@ -34,6 +34,39 @@ export default function TextFieldStyled({
         ...sx,
       }}
       fullWidth
+      {...rest}
+    />
+  );
+}
+
+export function InputAndormentAmount({ ...rest }: TextFieldProps) {
+  return (
+    <TextFieldStyled
+      placeholder="Enter your invoice amount"
+      slotProps={{
+        input: {
+          startAdornment: (
+            <InputAdornment position="start">
+              <Box
+                sx={{
+                  bgcolor: "rgba(217, 217, 217, 0.4)",
+                  py: 1,
+                  ml: -1.5,
+                  borderRadius: "3px 0 0 3px",
+                  color: "#64748B",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "80px",
+                }}
+              >
+                Rp
+              </Box>
+            </InputAdornment>
+          ),
+        },
+      }}
+      sx={{ "& .MuiInputBase-input": { pl: 1 } }}
       {...rest}
     />
   );
