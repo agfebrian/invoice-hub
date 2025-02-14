@@ -1,13 +1,17 @@
 import React from "react";
 import { format } from "date-fns";
-import { INVOICES_DATA } from "@/constants";
 import { TableBasic, TableCellStyled } from "@/components/ui/table";
 import MoreActions from "./more-action-table";
 import InvoiceStatus from "./invoice-status";
 import { Invoice } from "@/lib/types";
 import { currencyFormat } from "@/utils";
+import { Box, Typography } from "@mui/material";
 
-export function InvoiceTable() {
+interface Props {
+  data: Invoice[];
+}
+
+export async function InvoiceTable({ data }: Props) {
   return (
     <TableBasic<Invoice>
       header={[
@@ -17,10 +21,17 @@ export function InvoiceTable() {
         { id: "amount", label: "Amount" },
         { id: "action", label: "Action" },
       ]}
-      items={INVOICES_DATA}
+      items={data}
       renderValue={(row) => (
         <>
-          <TableCellStyled>{row?.code}</TableCellStyled>
+          <TableCellStyled>
+            <Box>
+              <Typography>{row?.description}</Typography>
+              <Typography variant="caption" color="textDisabled">
+                {row?.code}
+              </Typography>
+            </Box>
+          </TableCellStyled>
           <TableCellStyled>
             {format(row?.dueDate, "MMM dd, yyyy")}
           </TableCellStyled>
@@ -29,7 +40,7 @@ export function InvoiceTable() {
           </TableCellStyled>
           <TableCellStyled>{currencyFormat(row?.amount)}</TableCellStyled>
           <TableCellStyled>
-            <MoreActions />
+            <MoreActions id={row?.id} />
           </TableCellStyled>
         </>
       )}

@@ -5,6 +5,7 @@ export enum StatusInvoice {
 }
 
 export interface Invoice {
+  id: number;
   code: string;
   dueDate: Date;
   status: StatusInvoice;
@@ -32,4 +33,10 @@ export interface TableBasicProps<T> {
   header: TableHeadCell[];
   items: T[];
   renderValue?: (row: T) => JSX.Element;
+}
+
+export interface BaseResponse<T> {
+  status: boolean;
+  message: string;
+  data?: T;
 }

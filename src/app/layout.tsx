@@ -4,6 +4,7 @@ import { ThemeProvider } from "@mui/material";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import CssBaseline from "@mui/material/CssBaseline";
 import theme from "./theme";
+import { AlertProvider, Alert } from "@/components/ui/alert";
 import DashboardInvoice from "@/components/layout/dashboard-invoice";
 import "./globals.css";
 
@@ -30,7 +31,10 @@ export default function RootLayout({
         <AppRouterCacheProvider options={{ key: "css" }}>
           <ThemeProvider theme={theme}>
             <CssBaseline />
-            <DashboardInvoice>{children}</DashboardInvoice>
+            <AlertProvider>
+              <Alert />
+              <DashboardInvoice>{children}</DashboardInvoice>
+            </AlertProvider>
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>

@@ -1,10 +1,8 @@
-import { PrismaClient } from "@prisma/client";
+import prismaCient from "./client";
 import { INVOICES_DATA } from "@/constants";
 
-const prisma = new PrismaClient();
-
 async function main() {
-  await prisma.invoice.createMany({
+  await prismaCient.invoice.createMany({
     data: INVOICES_DATA,
   });
 
@@ -13,4 +11,4 @@ async function main() {
 
 main()
   .catch((e) => console.error(e))
-  .finally(() => prisma.$disconnect());
+  .finally(() => prismaCient.$disconnect());

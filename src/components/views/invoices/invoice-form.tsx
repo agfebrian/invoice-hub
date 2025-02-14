@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import FormLabelStyled from "@/components/ui/form-label-styled";
 import {
   TextFieldStyled,
@@ -10,21 +11,132 @@ import { ButtonPrimary } from "@/components/ui/buttons";
 import { NumericFormat } from "react-number-format";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AddInvoiceSchema, FormDataInvoice } from "@/lib/schemas";
+import { FormDataInvoice, InvoiceSchema } from "@/lib/schemas";
 import FormLabelError from "@/components/ui/form-label-error";
 import DatePickerX from "@/components/ui/datepicker";
+import { createInvoice, updateInvoice } from "@/lib/actions/invoice";
+import { Invoice } from "@/lib/types";
+import { useRouter } from "next/navigation";
+import { useAlert } from "@/components/ui/alert";
 
-export function InvoiceForm() {
+interface Props {
+  typeForm?: "add" | "edit";
+  defaultValue?: Invoice;
+}
+
+export function InvoiceForm({ typeForm = "add", defaultValue }: Props) {
+  const router = useRouter();
+  const { showAlert } = useAlert();
+
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<FormDataInvoice>({
     mode: "all",
-    resolver: zodResolver(AddInvoiceSchema),
+    resolver: zodResolver(InvoiceSchema),
   });
 
-  const onSubmit = (data: FormDataInvoice) => console.log("submitted ", data);
+  React.useEffect(() => {
+    if (typeForm === "edit" && defaultValue) {
+      setValue("code", defaultValue.code);
+      setValue("description", defaultValue.description);
+      setValue("dueDate", new Date(defaultValue.dueDate));
+      setValue("amount", defaultValue.amount);
+      setValue(
+        "status",
+        defaultValue.status == 1
+          ? "Paid"
+          : defaultValue.status == 2
+          ? "Unpaid"
+          : "Pending"
+      );
+    }
+  }, [typeForm, defaultValue, setValue]);
+
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
+  const handleCreateInvoice = async (data: FormDataInvoice) => {
+    setIsLoading(true);
+    try {
+      const res = await createInvoice({
+        code: data.code,
+        amount: Number(String(data.amount).replaceAll(",", "")),
+        description: data.description,
+        dueDate: new Date(data.dueDate),
+        status: data.status === "Paid" ? 1 : data.status === "Unpaid" ? 2 : 3,
+      } as Invoice);
+
+      if (res.status) {
+        router.push("/invoices/list");
+        router.refresh();
+        showAlert({
+          title: res.message,
+          message:
+            "You can view and manage your invoice in the 'My Invoices' section.",
+        });
+      } else {
+        showAlert({
+          type: "error",
+          title: res.message,
+          message: res.message,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      showAlert({
+        type: "error",
+        title: "Ops, something went wrong",
+        message: "Sory, we have a problem. You can try again later",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleUpdateInvoice = async (data: FormDataInvoice) => {
+    setIsLoading(true);
+    try {
+      const res = await updateInvoice(Number(defaultValue?.id), {
+        code: data.code,
+        amount: Number(String(data.amount).replaceAll(",", "")),
+        description: data.description,
+        dueDate: new Date(data.dueDate),
+        status: data.status === "Paid" ? 1 : data.status === "Unpaid" ? 2 : 3,
+      } as Invoice);
+
+      if (res.status) {
+        router.push("/invoices/list");
+        router.refresh();
+        showAlert({
+          title: res.message,
+          message:
+            "You can view and manage your invoice in the 'My Invoices' section.",
+        });
+      } else {
+        showAlert({
+          type: "error",
+          title: res.message,
+          message: res.message,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      showAlert({
+        type: "error",
+        title: "Ops, something went wrong",
+        message: "Sory, we have a problem. You can try again later",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const onSubmit = async (data: FormDataInvoice) => {
+    if (typeForm === "add") handleCreateInvoice(data);
+    else handleUpdateInvoice(data);
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -117,6 +229,7 @@ export function InvoiceForm() {
           <Controller
             name="status"
             control={control}
+            defaultValue=""
             render={({ field }) => (
               <SelectStyled
                 {...field}
@@ -135,7 +248,11 @@ export function InvoiceForm() {
         </Grid2>
       </Grid2>
       <Box display={"flex"} justifyContent={"flex-end"} mt={10}>
-        <ButtonPrimary sx={{ width: "259px" }} type="submit">
+        <ButtonPrimary
+          sx={{ width: "259px" }}
+          loading={isLoading}
+          type="submit"
+        >
           + Add Invoice
         </ButtonPrimary>
       </Box>
