@@ -21,6 +21,7 @@ export const NAVIGATION: Navigation[] = [
 
 export const INVOICES_DATA: Invoice[] = [
   {
+    id: 1,
     code: "INV202501",
     dueDate: new Date("01/13/2025"),
     status: StatusInvoice.PAID,
@@ -28,6 +29,7 @@ export const INVOICES_DATA: Invoice[] = [
     description: "Internet Subscription",
   },
   {
+    id: 2,
     code: "INV202502",
     dueDate: new Date("02/04/2025"),
     status: StatusInvoice.PAID,
@@ -35,6 +37,7 @@ export const INVOICES_DATA: Invoice[] = [
     description: "Electricity Bill",
   },
   {
+    id: 3,
     code: "INV202503",
     dueDate: new Date("02/23/2025"),
     status: StatusInvoice.UNPAID,
@@ -42,6 +45,7 @@ export const INVOICES_DATA: Invoice[] = [
     description: "Gym Membership",
   },
   {
+    id: 4,
     code: "INV202504",
     dueDate: new Date("02/23/2025"),
     status: StatusInvoice.PENDING,
