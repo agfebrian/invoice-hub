@@ -1,19 +1,27 @@
 import PageWrapper from "@/components/shared/page-wrapper";
 import { Title } from "@/components/ui/typography";
 import { InvoiceTable } from "@/components/views/invoices";
-import { CardContent } from "@mui/material";
+import { Box, CardContent, Typography } from "@mui/material";
 import CardStyled from "@/components/ui/card-styled";
 import { getInvoices } from "@/lib/actions/invoice";
 
 export default async function InvoiceList() {
-  const { data } = await getInvoices();
+  const data = await getInvoices();
 
   return (
     <PageWrapper>
       <Title>My Invoices</Title>
       <CardStyled>
         <CardContent>
-          <InvoiceTable data={data!} />
+          {data ? (
+            <InvoiceTable data={data.data!} />
+          ) : (
+            <Box py={12}>
+              <Typography variant="h6" textAlign="center">
+                Failed to load data.
+              </Typography>
+            </Box>
+          )}
         </CardContent>
       </CardStyled>
     </PageWrapper>
