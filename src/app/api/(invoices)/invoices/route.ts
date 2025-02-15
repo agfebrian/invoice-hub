@@ -3,13 +3,9 @@ import { NextResponse } from "next/server";
 import { InvoiceSchema } from "@/lib/schemas";
 import { Invoice } from "@/lib/types";
 
-export async function GET(
-  _request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function GET() {
   try {
-    const id = Number(params.id);
-    const res = await prismaCient.invoice.findUnique({ where: { id } });
+    const res = await prismaCient.invoice.findMany();
     return NextResponse.json({ status: true, data: res });
   } catch (error) {
     console.log(error);
@@ -17,13 +13,9 @@ export async function GET(
   }
 }
 
-export async function PUT(
-  requset: Request,
-  { params }: { params: { id: string } }
-) {
+export async function POST(request: Request) {
   try {
-    const id = Number(params.id);
-    const body = (await requset.json()) as Invoice;
+    const body = (await request.json()) as Invoice;
     const validateBody = InvoiceSchema.safeParse({
       ...body,
       dueDate: new Date(body.dueDate),
@@ -42,10 +34,7 @@ export async function PUT(
     }
 
     const { code, dueDate, amount, description, status } = body;
-    const updateInvoice = await prismaCient.invoice.update({
-      where: {
-        id,
-      },
+    const createInvoice = await prismaCient.invoice.create({
       data: {
         code,
         dueDate,
@@ -57,34 +46,8 @@ export async function PUT(
 
     return NextResponse.json({
       status: true,
-      message: "Successfully update invoice",
-      data: updateInvoice,
-    });
-  } catch (error) {
-    console.log(error);
-    return NextResponse.json(
-      { status: false, message: "Internal error" },
-      { status: 500 }
-    );
-  }
-}
-
-export async function DELETE(
-  _request: Request,
-  { params }: { params: { id: string } }
-) {
-  try {
-    const id = Number(params.id);
-    await prismaCient.invoice.delete({
-      where: {
-        id,
-      },
-    });
-
-    return NextResponse.json({
-      status: true,
-      message: "Successfully delete invoice",
-      data: null,
+      message: "Successfully add new invoice",
+      data: createInvoice,
     });
   } catch (error) {
     console.log(error);

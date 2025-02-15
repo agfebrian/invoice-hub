@@ -1,11 +1,15 @@
-import prismaCient from "../../../../prisma/client";
+import prismaCient from "../../../../../../prisma/client";
 import { NextResponse } from "next/server";
 import { InvoiceSchema } from "@/lib/schemas";
 import { Invoice } from "@/lib/types";
 
-export async function GET() {
+export async function GET(
+  _request: Request,
+  { params }: { params: { id: string } }
+) {
   try {
-    const res = await prismaCient.invoice.findMany();
+    const id = Number(params.id);
+    const res = await prismaCient.invoice.findUnique({ where: { id } });
     return NextResponse.json({ status: true, data: res });
   } catch (error) {
     console.log(error);
@@ -13,9 +17,13 @@ export async function GET() {
   }
 }
 
-export async function POST(request: Request) {
+export async function PUT(
+  requset: Request,
+  { params }: { params: { id: string } }
+) {
   try {
-    const body = (await request.json()) as Invoice;
+    const id = Number(params.id);
+    const body = (await requset.json()) as Invoice;
     const validateBody = InvoiceSchema.safeParse({
       ...body,
       dueDate: new Date(body.dueDate),
@@ -34,7 +42,10 @@ export async function POST(request: Request) {
     }
 
     const { code, dueDate, amount, description, status } = body;
-    const createInvoice = await prismaCient.invoice.create({
+    const updateInvoice = await prismaCient.invoice.update({
+      where: {
+        id,
+      },
       data: {
         code,
         dueDate,
@@ -46,8 +57,34 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       status: true,
-      message: "Successfully add new invoice",
-      data: createInvoice,
+      message: "Successfully update invoice",
+      data: updateInvoice,
+    });
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json(
+      { status: false, message: "Internal error" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(
+  _request: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const id = Number(params.id);
+    await prismaCient.invoice.delete({
+      where: {
+        id,
+      },
+    });
+
+    return NextResponse.json({
+      status: true,
+      message: "Successfully delete invoice",
+      data: null,
     });
   } catch (error) {
     console.log(error);

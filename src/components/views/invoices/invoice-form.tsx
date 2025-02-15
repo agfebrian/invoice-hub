@@ -14,10 +14,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormDataInvoice, InvoiceSchema } from "@/lib/schemas";
 import FormLabelError from "@/components/ui/form-label-error";
 import DatePickerX from "@/components/ui/datepicker";
-import { createInvoice, updateInvoice } from "@/lib/actions/invoice";
+import {
+  createInvoice,
+  getLatestInvoice,
+  updateInvoice,
+} from "@/lib/actions/invoice";
 import { Invoice } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { useAlert } from "@/components/ui/alert";
+import { generateInvoiceNumber } from "@/utils";
 
 interface Props {
   typeForm?: "add" | "edit";
@@ -39,6 +44,22 @@ export function InvoiceForm({ typeForm = "add", defaultValue }: Props) {
   });
 
   React.useEffect(() => {
+    const fetchLatestInvoice = async () => {
+      try {
+        const data = await getLatestInvoice();
+        if (data?.data) {
+          const invoiceNumber = generateInvoiceNumber(data?.data[0].code);
+          setValue("code", invoiceNumber);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (typeForm === "add") {
+      fetchLatestInvoice();
+    }
+
     if (typeForm === "edit" && defaultValue) {
       setValue("code", defaultValue.code);
       setValue("description", defaultValue.description);
@@ -178,6 +199,7 @@ export function InvoiceForm({ typeForm = "add", defaultValue }: Props) {
                 sx={{ marginTop: 1 }}
               />
             )}
+            disabled
           />
           <FormLabelError error={Boolean(errors?.code?.message)}>
             {errors?.code?.message}

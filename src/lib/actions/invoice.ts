@@ -20,6 +20,23 @@ export async function getInvoices(): Promise<BaseResponse<Invoice[]> | null> {
   }
 }
 
+export async function getLatestInvoice(): Promise<BaseResponse<
+  Invoice[]
+> | null> {
+  try {
+    const res = await fetch(`${BASE_URL}/api/latest-invoice`);
+
+    if (!res.ok) {
+      throw new Error(`API error! Status: ${res.status}`);
+    }
+
+    return res.json();
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
 export async function getDetailInvoice(
   id: number
 ): Promise<BaseResponse<Invoice>> {
