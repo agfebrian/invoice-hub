@@ -10,7 +10,7 @@ export function currencyFormat(num: number) {
 
 export function generateInvoiceNumber(invoice: string, uniqueNumber = 2) {
   if (!invoice.trim().length) {
-    return "Invalid params invoice";
+    return "INV202501";
   }
 
   const invoiceNumber = invoice.slice(-uniqueNumber);

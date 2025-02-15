@@ -22,7 +22,7 @@ import {
 import { Invoice } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { useAlert } from "@/components/ui/alert";
-import { generateInvoiceNumber } from "@/utils";
+import { generateInvoiceNumber, parseInvoiceStatus } from "@/utils";
 
 interface Props {
   typeForm?: "add" | "edit";
@@ -47,10 +47,9 @@ export function InvoiceForm({ typeForm = "add", defaultValue }: Props) {
     const fetchLatestInvoice = async () => {
       try {
         const data = await getLatestInvoice();
-        if (data?.data) {
-          const invoiceNumber = generateInvoiceNumber(data?.data[0].code);
-          setValue("code", invoiceNumber);
-        }
+        if (data?.data?.length)
+          setValue("code", generateInvoiceNumber(data?.data[0].code));
+        else setValue("code", generateInvoiceNumber(""));
       } catch (error) {
         console.log(error);
       }
@@ -86,7 +85,7 @@ export function InvoiceForm({ typeForm = "add", defaultValue }: Props) {
         amount: Number(String(data.amount).replaceAll(",", "")),
         description: data.description,
         dueDate: new Date(data.dueDate),
-        status: data.status === "Paid" ? 1 : data.status === "Unpaid" ? 2 : 3,
+        status: Number(parseInvoiceStatus(String(data.status).toUpperCase())),
       } as Invoice);
 
       if (res.status) {
@@ -124,7 +123,7 @@ export function InvoiceForm({ typeForm = "add", defaultValue }: Props) {
         amount: Number(String(data.amount).replaceAll(",", "")),
         description: data.description,
         dueDate: new Date(data.dueDate),
-        status: data.status === "Paid" ? 1 : data.status === "Unpaid" ? 2 : 3,
+        status: Number(parseInvoiceStatus(String(data.status).toUpperCase())),
       } as Invoice);
 
       if (res.status) {
@@ -255,6 +254,7 @@ export function InvoiceForm({ typeForm = "add", defaultValue }: Props) {
             render={({ field }) => (
               <SelectStyled
                 {...field}
+                placeholder="Choose the status"
                 error={Boolean(errors?.status?.message)}
                 sx={{ marginTop: 1 }}
               >

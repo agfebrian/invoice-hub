@@ -21,8 +21,8 @@ export function ButtonPrimary({
     <Button
       size={size}
       sx={{
-        ".MuiLoadingButton-root": {
-          color: "#FFF",
+        ".MuiCircularProgress-root": {
+          color: "#fff",
         },
         background: "#3C50E0",
         color: "#fff",
