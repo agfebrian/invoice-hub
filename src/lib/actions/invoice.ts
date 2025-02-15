@@ -1,13 +1,19 @@
 import { BASE_URL } from "@/constants";
 import { BaseResponse, Invoice } from "../types";
 
-export async function getInvoices(): Promise<BaseResponse<Invoice[]> | null> {
+export async function getInvoices(
+  q: string,
+  status: string
+): Promise<BaseResponse<Invoice[]> | null> {
   try {
-    const res = await fetch(`${BASE_URL}/api/invoices`, {
-      next: {
-        revalidate: 0,
-      },
-    });
+    const res = await fetch(
+      `${BASE_URL}/api/invoices?q=${q}&status=${status}`,
+      {
+        next: {
+          revalidate: 0,
+        },
+      }
+    );
 
     if (!res.ok) {
       throw new Error(`API error! Status: ${res.status}`);

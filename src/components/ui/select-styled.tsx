@@ -1,26 +1,29 @@
 "use client";
 import { Select, SelectProps, Typography } from "@mui/material";
 
+type Props = SelectProps & {
+  placeholder?: string;
+};
+
 export default function SelectStyled({
   variant = "outlined",
   size = "small",
   sx,
+  placeholder,
   children,
   ...rest
-}: SelectProps) {
+}: Props) {
   return (
     <Select
       variant={variant}
       renderValue={(selected) => {
         if (!selected) {
-          return (
-            <Typography color="textSecondary">Choose the status</Typography>
-          );
+          return <Typography color="textSecondary">{placeholder}</Typography>;
         }
 
         return selected.toString();
       }}
-      displayEmpty
+      displayEmpty={Boolean(placeholder?.length)}
       sx={{
         "& .MuiInputBase-input::placeholder": {
           color: "#64748B",

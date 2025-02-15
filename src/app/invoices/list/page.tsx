@@ -3,25 +3,41 @@ import { Title } from "@/components/ui/typography";
 import { InvoiceTable } from "@/components/views/invoices";
 import { Box, CardContent, Typography } from "@mui/material";
 import CardStyled from "@/components/ui/card-styled";
-import { getInvoices } from "@/lib/actions/invoice";
+import InvoiceSearch from "@/components/views/invoices/invoice-search";
+import InvoiceFilterStatus from "@/components/views/invoices/invoice-filter-status";
+import { Suspense } from "react";
 
-export default async function InvoiceList() {
-  const data = await getInvoices();
+export default async function InvoiceList(props: {
+  searchParams?: Promise<{
+    q?: string;
+    status?: string;
+  }>;
+}) {
+  const searchParams = await props.searchParams;
+  const q = searchParams?.q || "";
+  const statusInvoice = searchParams?.status || "";
 
   return (
     <PageWrapper>
-      <Title>My Invoices</Title>
+      <Box
+        display={"flex"}
+        alignItems={"center"}
+        justifyContent={"space-between"}
+      >
+        <Title>My Invoices</Title>
+        <Box display={"flex"} alignItems={"center"} gap={2}>
+          <InvoiceSearch />
+          <InvoiceFilterStatus />
+        </Box>
+      </Box>
       <CardStyled>
         <CardContent>
-          {data ? (
-            <InvoiceTable data={data.data!} />
-          ) : (
-            <Box py={12}>
-              <Typography variant="h6" textAlign="center">
-                Failed to load data.
-              </Typography>
-            </Box>
-          )}
+          <Suspense
+            key={q + statusInvoice}
+            fallback={<Typography>Loading..</Typography>}
+          >
+            <InvoiceTable q={q} status={statusInvoice} />
+          </Suspense>
         </CardContent>
       </CardStyled>
     </PageWrapper>

@@ -1,3 +1,5 @@
+import { StatusInvoice } from "@/lib/types";
+
 export function currencyFormat(num: number) {
   return Intl.NumberFormat("id-ID", {
     style: "currency",
@@ -22,4 +24,18 @@ export function generateInvoiceNumber(invoice: string, uniqueNumber = 2) {
     0,
     invoice.length - uniqueNumber
   )}${resultNextInvoiceNumber}`;
+}
+
+export function parseInvoiceStatus(status: string) {
+  let result: string | number = "";
+  const entriesStatusInvoice = Object.entries(StatusInvoice);
+
+  for (let i = 0; i < entriesStatusInvoice.length; i++) {
+    if (entriesStatusInvoice[i].includes(status.toUpperCase())) {
+      result = entriesStatusInvoice[i][0];
+      break;
+    }
+  }
+
+  return result;
 }

@@ -4,14 +4,28 @@ import { TableBasic, TableCellStyled } from "@/components/ui/table";
 import MoreActions from "./more-action-table";
 import InvoiceStatus from "./invoice-status";
 import { Invoice } from "@/lib/types";
-import { currencyFormat } from "@/utils";
+import { currencyFormat, parseInvoiceStatus } from "@/utils";
 import { Box, Typography } from "@mui/material";
+import { getInvoices } from "@/lib/actions/invoice";
 
 interface Props {
-  data: Invoice[];
+  q: string;
+  status: string;
 }
 
-export async function InvoiceTable({ data }: Props) {
+export async function InvoiceTable({ q, status }: Props) {
+  const data = await getInvoices(q, parseInvoiceStatus(status));
+
+  if (!data) {
+    return (
+      <Box py={12}>
+        <Typography variant="h6" textAlign="center">
+          Failed to load data.
+        </Typography>
+      </Box>
+    );
+  }
+
   return (
     <TableBasic<Invoice>
       header={[
@@ -21,7 +35,7 @@ export async function InvoiceTable({ data }: Props) {
         { id: "amount", label: "Amount" },
         { id: "action", label: "Action" },
       ]}
-      items={data}
+      items={data.data!}
       renderValue={(row) => (
         <>
           <TableCellStyled>

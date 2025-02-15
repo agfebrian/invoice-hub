@@ -21,6 +21,9 @@ export function ButtonPrimary({
     <Button
       size={size}
       sx={{
+        ".MuiLoadingButton-root": {
+          color: "#FFF",
+        },
         background: "#3C50E0",
         color: "#fff",
         textTransform: textTransform,

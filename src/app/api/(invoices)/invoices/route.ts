@@ -1,11 +1,28 @@
 import prismaCient from "../../../../../prisma/client";
-import { NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { InvoiceSchema } from "@/lib/schemas";
 import { Invoice } from "@/lib/types";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const res = await prismaCient.invoice.findMany();
+    const searchParams = request.nextUrl.searchParams;
+    const query = searchParams.get("q") || "";
+    const status = searchParams.get("status") || undefined;
+    let filterStatus = {};
+
+    if (status) {
+      filterStatus = { status: Number(status) };
+    }
+
+    const res = await prismaCient.invoice.findMany({
+      where: {
+        description: {
+          contains: query,
+          mode: "insensitive",
+        },
+        ...filterStatus,
+      },
+    });
     return NextResponse.json({ status: true, data: res });
   } catch (error) {
     console.log(error);
