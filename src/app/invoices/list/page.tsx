@@ -1,10 +1,11 @@
 import PageWrapper from "@/components/shared/page-wrapper";
 import { Title } from "@/components/ui/typography";
 import { InvoiceTable } from "@/components/views/invoices";
-import { Box, CardContent, Typography } from "@mui/material";
+import { Box, CardContent } from "@mui/material";
 import CardStyled from "@/components/ui/card-styled";
 import InvoiceSearch from "@/components/views/invoices/invoice-search";
 import InvoiceFilterStatus from "@/components/views/invoices/invoice-filter-status";
+import SkeletonTable from "@/components/shared/skeleton-table";
 import { Suspense } from "react";
 
 export default async function InvoiceList(props: {
@@ -32,10 +33,7 @@ export default async function InvoiceList(props: {
       </Box>
       <CardStyled>
         <CardContent>
-          <Suspense
-            key={q + statusInvoice}
-            fallback={<Typography>Loading..</Typography>}
-          >
+          <Suspense key={q + statusInvoice} fallback={<SkeletonTable />}>
             <InvoiceTable q={q} status={statusInvoice} />
           </Suspense>
         </CardContent>

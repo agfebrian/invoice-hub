@@ -6,6 +6,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import theme from "./theme";
 import { AlertProvider, Alert } from "@/components/ui/alert";
 import DashboardInvoice from "@/components/layout/dashboard-invoice";
+import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
 
 const openSans = Open_Sans({
@@ -28,6 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={openSans.variable}>
+        <NextTopLoader color="#1C2434" />
         <AppRouterCacheProvider options={{ key: "css" }}>
           <ThemeProvider theme={theme}>
             <CssBaseline />
