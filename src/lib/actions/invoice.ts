@@ -31,6 +31,7 @@ export async function getLatestInvoice(): Promise<BaseResponse<
 > | null> {
   try {
     const res = await fetch(`${BASE_URL}/api/latest-invoice`, {
+      cache: "no-store",
       next: {
         revalidate: 0,
       },

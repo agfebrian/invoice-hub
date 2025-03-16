@@ -47,6 +47,7 @@ export function InvoiceForm({ typeForm = "add", defaultValue }: Props) {
     const fetchLatestInvoice = async () => {
       try {
         const data = await getLatestInvoice();
+        console.log("res client", data?.data);
         if (data?.data?.length)
           setValue("code", generateInvoiceNumber(data?.data[0].code));
         else setValue("code", generateInvoiceNumber(""));
