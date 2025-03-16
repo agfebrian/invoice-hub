@@ -30,7 +30,11 @@ export async function getLatestInvoice(): Promise<BaseResponse<
   Invoice[]
 > | null> {
   try {
-    const res = await fetch(`${BASE_URL}/api/latest-invoice`);
+    const res = await fetch(`${BASE_URL}/api/latest-invoice`, {
+      next: {
+        revalidate: 0,
+      },
+    });
 
     if (!res.ok) {
       throw new Error(`API error! Status: ${res.status}`);
