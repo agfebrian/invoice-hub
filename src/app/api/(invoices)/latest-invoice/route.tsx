@@ -7,7 +7,6 @@ export async function GET() {
       orderBy: {
         id: "desc",
       },
-      take: 1,
     });
     console.log("response server", res);
     return NextResponse.json({ status: true, data: res });
