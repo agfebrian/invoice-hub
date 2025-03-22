@@ -16,7 +16,7 @@ import FormLabelError from "@/components/ui/form-label-error";
 import DatePickerX from "@/components/ui/datepicker";
 import {
   createInvoice,
-  getLatestInvoice,
+  getInvoices,
   updateInvoice,
 } from "@/lib/actions/invoice";
 import { Invoice } from "@/lib/types";
@@ -46,7 +46,7 @@ export function InvoiceForm({ typeForm = "add", defaultValue }: Props) {
   React.useEffect(() => {
     const fetchLatestInvoice = async () => {
       try {
-        const data = await getLatestInvoice();
+        const data = await getInvoices("", "");
         console.log("res client", data?.data);
         if (data?.data?.length)
           setValue("code", generateInvoiceNumber(data?.data[0].code));

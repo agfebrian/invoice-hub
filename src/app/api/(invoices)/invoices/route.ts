@@ -22,6 +22,9 @@ export async function GET(request: NextRequest) {
         },
         ...filterStatus,
       },
+      orderBy: {
+        id: "desc",
+      },
     });
     return NextResponse.json({ status: true, data: res });
   } catch (error) {
